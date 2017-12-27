@@ -34,7 +34,7 @@ const cardCollection: CardCollection = {
                   isDragDisabled: true,
                 },
   [handZone]: {
-                  cards: getCards(2),
+                  cards: getCards(5),
                   zoneName: 'Hand',
                   isDropDisabled: true,
                   isDragDisabled: false,
