@@ -14,18 +14,6 @@ import type { Card } from '../types';
 import type { CardCollection } from '../types';
 import { handCardPlay } from '../models/GameCalc';
 
-const notificationOpts = {
-  // uid: 'once-please', // you can specify your own uid if required
-  title: 'Hey, it\'s good to see you!',
-  message: 'Now you can see how easy it is to use notifications in React!',
-  position: 'tc',
-  autoDismiss: 2,
-  action: {
-    label: 'Click me!!',
-    callback: () => alert('clicked!')
-  }
-};
-
 const memberZone: string = 'memberZone';
 const practiceZone: string = 'practiceZone';
 const handZone: string = 'handZone';
@@ -33,13 +21,13 @@ const handZone: string = 'handZone';
 const cardCollection: CardCollection = {
   [memberZone]: {
                   cards: getCards(0),
-                  zoneName: 'Members',
+                  zoneName: 'Member',
                   isDropDisabled: false,
                   isDragDisabled: true,
                 },
   [practiceZone]: {
                   cards: getCards(0),
-                  zoneName: 'Practices',
+                  zoneName: 'Practice',
                   isDropDisabled: false,
                   isDragDisabled: true,
                 },
@@ -65,32 +53,7 @@ class Game extends Component<Props, State> {
     };
 
     this.playCard = this.playCard.bind(this);
-    //notification
-    this.handleClick = this.handleClick.bind(this);
-    this.handleRemoveAll = this.handleRemoveAll.bind(this);
   };
-
-  //=============== below are for notification
-
-    dispatchNotification(fn, timeout) {
-      setTimeout(() => {
-        this.context.store.dispatch(fn(notificationOpts));
-      }, timeout);
-    }
-
-    handleClick() {
-      console.log("====WTF!");
-      this.dispatchNotification(success, 250);
-      this.dispatchNotification(error, 500);
-      this.dispatchNotification(warning, 750);
-      this.dispatchNotification(info, 1000);
-    }
-
-    handleRemoveAll() {
-      this.context.store.dispatch(removeAll());
-    }
-
-  //=============== above are for notification
 
   playCard(card, members) {
     this.setState(
@@ -103,9 +66,8 @@ class Game extends Component<Props, State> {
 
     return (
       <div className="container game-root">
-        <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} handleNotification={this.handleClick} />
+        <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} />
         <GameStats initial={this.state} />
-        <button onClick={this.handleClick}>Spawn some notifications!!!</button>
         <Notifications notifications={notifications} />
       </div>
     );

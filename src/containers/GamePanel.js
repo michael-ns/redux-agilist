@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import Notifications, { success } from 'react-notification-system-redux';
+import Notifications, { success, error, warning, info, removeAll } from 'react-notification-system-redux';
 import styled, { injectGlobal } from 'styled-components';
 import { action } from '@storybook/addon-actions';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -43,12 +43,8 @@ const notificationOpts = {
   // uid: 'once-please', // you can specify your own uid if required
   title: 'Hey, it\'s good to see you!',
   message: 'Now you can see how easy it is to use notifications in React!',
-  position: 'tc',
-  autoDismiss: 2,
-  action: {
-    label: 'Click me!!',
-    callback: () => alert('clicked!')
-  }
+  position: 'bc',
+  autoDismiss: 6
 };
 
 class GameBoard extends Component<Props, State> {
@@ -64,9 +60,24 @@ class GameBoard extends Component<Props, State> {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      cardCollection: nextProps.cardCollection,
+      gameState: nextProps.gameState,
+      autoFocusCardId: nextProps.autoFocusCardId,
+    });
+  }
+
+  handleClick(message) {
     this.context.store.dispatch(
-      success(notificationOpts)
+      warning(
+        {
+          title: 'Invalid Game Action',
+          message: message,
+          position: 'bc',
+          autoDismiss: 6
+        }
+      )
     );
   }
 
@@ -87,12 +98,11 @@ class GameBoard extends Component<Props, State> {
     }
 
     // check game rule to see whether this is a valid card play
-    var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
-    var ruleCheck = cardPlayRule(draggedCard, this.state.gameState, this.state.cardCollection);
+    var targetCard = this.state.cardCollection[result.source.droppableId].cards[result.source.index];
+    var ruleCheck = cardPlayRule(targetCard, this.state.gameState, this.state.cardCollection, result.destination);
 
     if (ruleCheck != "success") {
-      console.log("=====" + ruleCheck);
-      this.handleClick();
+      this.handleClick(ruleCheck);
       return;
     }
 
@@ -107,6 +117,7 @@ class GameBoard extends Component<Props, State> {
 
     //update game stats at the end of this function
     // console.log("====" + JSON.stringify(result.destination));
+    var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
     var members = this.state.cardCollection['memberZone'].cards;
     this.props.playCard(draggedCard, members);
   }
@@ -135,7 +146,6 @@ class GameBoard extends Component<Props, State> {
             internalScroll
             key={key}
             listId={key}
-            listType="wtf"
             listTitle={cardCollection[key].zoneName}
             cards={cardCollection[key].cards}
             autoFocusCardId={autoFocusCardId}
