@@ -64,11 +64,13 @@ class Game extends Component<Props, State> {
   };
 
   handleEndTurn() {
-    //console.log("=== " + JSON.stringify(state));
     this.setState({
       turn: this.state.turn + 1,
       actionLeft: this.state.agilityLevel,
     });
+
+    //deal one card to hand
+    cardCollection[handZone].cards.push(getCards(1)[0]);
   };
 
   render() {
