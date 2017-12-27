@@ -11,6 +11,7 @@ const cardReorder = (
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
+  console.log("within cardReorder ====" + JSON.stringify(result));
   return result;
 };
 
@@ -32,9 +33,13 @@ export const reorderCardCollection = ({
   source,
   destination,
 }: ReorderCardCollectionArgs): ReorderCardCollectionResult => {
-  const current: Card[] = [...cardCollection[source.droppableId]];
-  const next: Card[] = [...cardCollection[destination.droppableId]];
+  const current: Card[] = [...cardCollection[source.droppableId].cards];
+  const next: Card[] = [...cardCollection[destination.droppableId].cards];
   const target: Card = current[source.index];
+
+  console.log("current ====" + JSON.stringify(current));
+  console.log("next ====" + JSON.stringify(next));
+  console.log("target ====" + JSON.stringify(target));
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
@@ -43,12 +48,18 @@ export const reorderCardCollection = ({
       source.index,
       destination.index,
     );
-    const result: CardCollection = {
-      ...cardCollection,
-      [source.droppableId]: reordered,
-    };
+    const newCardCollection = cardCollection;
+    newCardCollection[source.droppableId].cards = reordered;
+
+    // const result: CardCollection = {
+    //   // ...cardCollection,
+    //   // [source.droppableId]: reordered,
+    //   ...cardCollection,
+    //   [source.droppableId]: reordered,
+    // };
+    // console.log("within reorder ====" + JSON.stringify(newCardCollection));
     return {
-      cardCollection: result,
+      cardCollection: newCardCollection,
       // not auto focusing in own list
       autoFocusCardId: null,
     };
@@ -61,14 +72,18 @@ export const reorderCardCollection = ({
   // insert into next
   next.splice(destination.index, 0, target);
 
-  const result: CardCollection = {
-    ...cardCollection,
-    [source.droppableId]: current,
-    [destination.droppableId]: next,
-  };
+  const newCardCollection = cardCollection;
+  newCardCollection[source.droppableId].cards = current;
+  newCardCollection[destination.droppableId].cards = next;
+
+  // const result: CardCollection = {
+  //   ...cardCollection,
+  //   [source.droppableId.cards]: current,
+  //   [destination.droppableId.cards]: next,
+  // };
 
   return {
-    cardCollection: result,
+    cardCollection: newCardCollection,
     autoFocusCardId: target.id,
   };
 };

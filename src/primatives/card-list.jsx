@@ -88,7 +88,7 @@ export default class CardList extends Component<Props> {
   }
 
   render() {
-    const { listId, listType, listTitle, internalScroll, isDropDisabled } = this.props;
+    const { listId, listType, listTitle, internalScroll, isDropDisabled, cards } = this.props;
 
     return (
       <Droppable droppableId={listId} type={listType} direction="horizontal">

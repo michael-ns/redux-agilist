@@ -14,32 +14,32 @@ const memberZone: string = 'memberZone';
 const practiceZone: string = 'practiceZone';
 const handZone: string = 'handZone';
 
-const cardCollection: CardCollection = {
-  [memberZone]: getCards(0),
-  [practiceZone]: getCards(0),
-  [handZone]: getCards(5),
-};
-
 // const cardCollection: CardCollection = {
-//   [memberZone]: {
-//                   cards: getCards(0),
-//                   zoneName: 'Members',
-//                   isDropDisabled: false,
-//                   isDragDisabled: true,
-//                 },
-//   [practiceZone]: {
-//                   cards: getCards(0),
-//                   zoneName: 'Practices',
-//                   isDropDisabled: false,
-//                   isDragDisabled: true,
-//                 },
-//   [handZone]: {
-//                   cards: getCards(5),
-//                   zoneName: 'Hand',
-//                   isDropDisabled: true,
-//                   isDragDisabled: false,
-//                 },
+//   [memberZone]: getCards(0),
+//   [practiceZone]: getCards(0),
+//   [handZone]: getCards(5),
 // };
+
+const cardCollection: CardCollection = {
+  [memberZone]: {
+                  cards: getCards(0),
+                  zoneName: 'Members',
+                  isDropDisabled: false,
+                  isDragDisabled: true,
+                },
+  [practiceZone]: {
+                  cards: getCards(0),
+                  zoneName: 'Practices',
+                  isDropDisabled: false,
+                  isDragDisabled: true,
+                },
+  [handZone]: {
+                  cards: getCards(2),
+                  zoneName: 'Hand',
+                  isDropDisabled: true,
+                  isDragDisabled: false,
+                },
+};
 
 export default class Game extends Component<Props, State> {
   constructor(props) {
@@ -66,7 +66,7 @@ export default class Game extends Component<Props, State> {
   render() {
     return (
       <div className="container game-root">
-        <GamePanel initial={cardCollection} playCard={this.playCard} gameState={this.state} />
+        <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} />
         <GameStats initial={this.state} />
       </div>
     );

@@ -35,24 +35,12 @@ type Props = {|
 
 type State = ReorderCardCollectionResult;
 
-const initialGameState = {
-  turn: 1,
-  handCount: 5,
-  dealHand: 1,
-  memberCount: 0,
-  practiceCount: 0,
-  prodPoint: 0,
-  agilityPoint: 0,
-  prodLevels: [{"1": "3"}, {"2": "5"}, {"3": "8"}],
-  agilityLevels: [{"1": "3"}, {"2": "5"}, {"3": "8"}]
-}
-
 export default class GameBoard extends Component<Props, State> {
   /* eslint-disable react/sort-comp */
 
   state: State = {
-    cardCollection: this.props.initial,
-    gameState: initialGameState,
+    cardCollection: this.props.cardCollection,
+    gameState: this.props.gameState,
     autoFocusCardId: null,
   };
 
@@ -72,6 +60,9 @@ export default class GameBoard extends Component<Props, State> {
       return;
     }
 
+    console.log("source ====" + JSON.stringify(result.source));
+    console.log("destination ====" + JSON.stringify(result.destination));
+
     this.setState(reorderCardCollection({
       cardCollection: this.state.cardCollection,
       source: result.source,
@@ -80,8 +71,8 @@ export default class GameBoard extends Component<Props, State> {
 
     //update game stats at the end of this function
     console.log("====" + JSON.stringify(result.destination));
-    var draggedCard = this.state.cardCollection[result.destination.droppableId][result.destination.index];
-    var members = this.state.cardCollection['memberZone'];
+    var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
+    var members = this.state.cardCollection['memberZone'].cards;
     this.props.playCard(draggedCard, members);
   }
 
@@ -110,8 +101,8 @@ export default class GameBoard extends Component<Props, State> {
             key={key}
             listId={key}
             listType="wtf"
-            listTitle={key}
-            cards={cardCollection[key]}
+            listTitle={cardCollection[key].zoneName}
+            cards={cardCollection[key].cards}
             autoFocusCardId={autoFocusCardId}
           />
         ))}

@@ -37,15 +37,15 @@ export type Card = {|
   agilityPointMultiplier: number
 |}
 
-export type CardCollection = {
-  [key: string]: Card[]
-}
-//
 // export type CardCollection = {
-//   [key: string]: {
-//     cards: Card[],
-//     zoneName: string,
-//     isDropDisabled: boolean,
-//     isDragDisabled: boolean,
-//   }
+//   [key: string]: Card[]
 // }
+//
+export type CardCollection = {
+  [key: string]: {
+    cards: Card[],
+    zoneName: string,
+    isDropDisabled: boolean,
+    isDragDisabled: boolean,
+  }
+}

@@ -63,8 +63,8 @@ flex-basis: 100%
 display: flex;
 flex-direction: column;
 
-min-height: 25vh;
-min-width: 20vh;
+min-height: 300 px;
+min-width: 150 px;
 `;
 
 const PointInfo = styled.div`
