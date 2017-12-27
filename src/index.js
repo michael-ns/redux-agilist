@@ -1,11 +1,23 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import {createStore, combineReducers} from 'redux';
 import { Provider } from 'react-redux'
-import reducer from './reducers'
+// import reducer from './reducers'
 import Game from './components/Game'
+import {reducer as notifications} from 'react-notification-system-redux';
 
-const store = createStore(reducer)
+function configureStore(initialState = {}) {
+  return createStore(
+    combineReducers({
+      notifications
+    }),
+    initialState
+  );
+}
+
+const store = configureStore();
+
+window.appStore = store;
 
 render(
   <Provider store={store}>

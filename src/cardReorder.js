@@ -11,7 +11,7 @@ const cardReorder = (
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
-  console.log("within cardReorder ====" + JSON.stringify(result));
+  // console.log("within cardReorder ====" + JSON.stringify(result));
   return result;
 };
 
@@ -37,9 +37,9 @@ export const reorderCardCollection = ({
   const next: Card[] = [...cardCollection[destination.droppableId].cards];
   const target: Card = current[source.index];
 
-  console.log("current ====" + JSON.stringify(current));
-  console.log("next ====" + JSON.stringify(next));
-  console.log("target ====" + JSON.stringify(target));
+  // console.log("current ====" + JSON.stringify(current));
+  // console.log("next ====" + JSON.stringify(next));
+  // console.log("target ====" + JSON.stringify(target));
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {

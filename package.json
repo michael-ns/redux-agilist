@@ -15,7 +15,9 @@
     "react-redux": "^5.0.5",
     "redux": "^3.5.2",
     "styled-components": "^2.2.3",
-    "@storybook/react": "^3.2.16"
+    "@storybook/react": "^3.2.16",
+    "react-notification-system": "0.2.x",
+    "react-notification-system-redux": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

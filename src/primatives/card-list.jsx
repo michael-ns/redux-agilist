@@ -57,7 +57,7 @@ type Props = {|
 |}
 
 export default class CardList extends Component<Props> {
-  renderCards = (boardTitle: BoardTitle, dropProvided: DroppableProvided) => {
+  renderCards = (boardTitle: BoardTitle, dropProvided: DroppableProvided, isDragDisabled: IsDragDisabled) => {
     const { listType, cards } = this.props;
 
     return (
@@ -65,7 +65,7 @@ export default class CardList extends Component<Props> {
         <h4>{boardTitle} - {cards.length}</h4>
         <DropZone innerRef={dropProvided.innerRef}>
           {cards.map((card: Card) => (
-            <Draggable key={card.id} draggableId={card.id} type={listType}>
+            <Draggable key={card.id} draggableId={card.id} type={listType} isDragDisabled={isDragDisabled}>
               {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
                 <div>
                   <CardItem
@@ -88,18 +88,18 @@ export default class CardList extends Component<Props> {
   }
 
   render() {
-    const { listId, listType, listTitle, internalScroll, isDropDisabled, cards } = this.props;
+    const { listId, listType, listTitle, internalScroll, isDropDisabled, isDragDisabled, cards } = this.props;
 
     return (
-      <Droppable droppableId={listId} type={listType} direction="horizontal">
+      <Droppable droppableId={listId} type={listType} direction="horizontal" isDropDisabled={isDropDisabled}>
         {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
           <Wrapper isDraggingOver={dropSnapshot.isDraggingOver}>
             {internalScroll ? (
               <ScrollContainer>
-                {this.renderCards(listTitle, dropProvided)}
+                {this.renderCards(listTitle, dropProvided, isDragDisabled)}
               </ScrollContainer>
             ) : (
-              this.renderCards(listTitle, dropProvided)
+              this.renderCards(listTitle, dropProvided, isDragDisabled)
             )}
           </Wrapper>
         )}
@@ -107,41 +107,3 @@ export default class CardList extends Component<Props> {
     );
   }
 }
-
-//
-//   render() {
-//     const {
-//       ignoreContainerClipping,
-//       internalScroll,
-//       isDropDisabled,
-//       listId,
-//       listType,
-//       style,
-//     } = this.props;
-//
-//     return (
-//       <Droppable
-//         droppableId={listId}
-//         ignoreContainerClipping={ignoreContainerClipping}
-//         isDropDisabled={isDropDisabled}
-//         type={listType}
-//       >
-//         {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
-//           <Wrapper
-//             style={style}
-//             isDraggingOver={dropSnapshot.isDraggingOver}
-//             isDropDisabled={isDropDisabled}
-//           >
-//             {internalScroll ? (
-//               <ScrollContainer>
-//                 {this.renderCards(dropProvided)}
-//               </ScrollContainer>
-//             ) : (
-//               this.renderCards(dropProvided)
-//             )}
-//           </Wrapper>
-//         )}
-//       </Droppable>
-//     );
-//   }
-// }

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
+import Notifications, { success } from 'react-notification-system-redux';
 import styled, { injectGlobal } from 'styled-components';
 import { action } from '@storybook/addon-actions';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -13,6 +16,7 @@ import type {
   DropResult,
   DragStart,
 } from 'react-beautiful-dnd';
+import { cardPlayRule } from '../models/CardPlayRule';
 
 const publishOnDragStart = action('onDragStart');
 const publishOnDragEnd = action('onDragEnd');
@@ -35,14 +39,36 @@ type Props = {|
 
 type State = ReorderCardCollectionResult;
 
-export default class GameBoard extends Component<Props, State> {
-  /* eslint-disable react/sort-comp */
+const notificationOpts = {
+  // uid: 'once-please', // you can specify your own uid if required
+  title: 'Hey, it\'s good to see you!',
+  message: 'Now you can see how easy it is to use notifications in React!',
+  position: 'tc',
+  autoDismiss: 2,
+  action: {
+    label: 'Click me!!',
+    callback: () => alert('clicked!')
+  }
+};
 
-  state: State = {
-    cardCollection: this.props.cardCollection,
-    gameState: this.props.gameState,
-    autoFocusCardId: null,
-  };
+class GameBoard extends Component<Props, State> {
+  /* eslint-disable react/sort-comp */
+  constructor(props) {
+    super(props);
+    this.state = {
+      cardCollection: this.props.cardCollection,
+      gameState: this.props.gameState,
+      autoFocusCardId: null,
+    };
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.context.store.dispatch(
+      success(notificationOpts)
+    );
+  }
 
   onDragStart = (initial: DragStart) => {
     publishOnDragStart(initial);
@@ -60,8 +86,18 @@ export default class GameBoard extends Component<Props, State> {
       return;
     }
 
-    console.log("source ====" + JSON.stringify(result.source));
-    console.log("destination ====" + JSON.stringify(result.destination));
+    // check game rule to see whether this is a valid card play
+    var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
+    var ruleCheck = cardPlayRule(draggedCard, this.state.gameState, this.state.cardCollection);
+
+    if (ruleCheck != "success") {
+      console.log("=====" + ruleCheck);
+      this.handleClick();
+      return;
+    }
+
+    // console.log("source ====" + JSON.stringify(result.source));
+    // console.log("destination ====" + JSON.stringify(result.destination));
 
     this.setState(reorderCardCollection({
       cardCollection: this.state.cardCollection,
@@ -70,8 +106,7 @@ export default class GameBoard extends Component<Props, State> {
     }));
 
     //update game stats at the end of this function
-    console.log("====" + JSON.stringify(result.destination));
-    var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
+    // console.log("====" + JSON.stringify(result.destination));
     var members = this.state.cardCollection['memberZone'].cards;
     this.props.playCard(draggedCard, members);
   }
@@ -104,6 +139,8 @@ export default class GameBoard extends Component<Props, State> {
             listTitle={cardCollection[key].zoneName}
             cards={cardCollection[key].cards}
             autoFocusCardId={autoFocusCardId}
+            isDropDisabled={cardCollection[key].isDropDisabled}
+            isDragDisabled={cardCollection[key].isDragDisabled}
           />
         ))}
         </Root>
@@ -111,3 +148,9 @@ export default class GameBoard extends Component<Props, State> {
     );
   }
 }
+
+GameBoard.contextTypes = {
+  store: PropTypes.object
+};
+
+export default GameBoard;
