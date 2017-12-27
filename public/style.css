@@ -1,0 +1,23 @@
+.projectPanel {
+  background-color: lightgreen;
+}
+
+.teamPanel {
+  background-color: lightyellow;
+}
+
+.teamStatesPanel {
+  background-color: lightblue;
+}
+
+.teamMembersPanel {
+  background-color: pink;
+}
+
+.recruitmentPanel {
+  background-color: gray;
+}
+
+.panel {
+  margin: 10px;
+}
