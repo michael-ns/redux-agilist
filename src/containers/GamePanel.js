@@ -119,7 +119,8 @@ class GameBoard extends Component<Props, State> {
     // console.log("====" + JSON.stringify(result.destination));
     var draggedCard = this.state.cardCollection[result.destination.droppableId].cards[result.destination.index];
     var members = this.state.cardCollection['memberZone'].cards;
-    this.props.playCard(draggedCard, members);
+    var practices = this.state.cardCollection['practiceZone'].cards;
+    this.props.playCard(draggedCard, members, practices);
   }
 
   componentDidMount() {

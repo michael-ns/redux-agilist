@@ -141,6 +141,14 @@ export default class CardItem extends Component<Props> {
   render() {
     const { card, isDragging, provided, snapshot } = this.props;
 
+    var productivityStyle = {
+      color: 'orange'
+    };
+
+    var agilityStyle = {
+      color: 'LimeGreen'
+    };
+
     return (
       <Container className="card-item"
         isDragging={isDragging}
@@ -150,8 +158,8 @@ export default class CardItem extends Component<Props> {
       >
         <Avatar src={card.avatarUrl} alt={card.name} />
         <Content classname="card-info">
-          <PointInfo>P Pts: { this.cardProdInfo(card) }</PointInfo>
-          <PointInfo>A Pts: { this.cardAgilityInfo(card) }</PointInfo>
+          <PointInfo style={productivityStyle}>P Pts: { this.cardProdInfo(card) }</PointInfo>
+          <PointInfo style={agilityStyle}>A Pts: { this.cardAgilityInfo(card) }</PointInfo>
           <Footer>
             <QuoteId></QuoteId>
             <Attribution>{card.name}</Attribution>

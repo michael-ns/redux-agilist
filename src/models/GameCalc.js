@@ -1,6 +1,6 @@
-export const handCardPlay = (card, members, gameState)=>{
-  var newProdPoint = calcProductivityPoint(members);
-  var newAgilityPoint = calcAgilityPoint(members);
+export const handCardPlay = (card, members, practices, gameState)=>{
+  var newProdPoint = calcProductivityPoint(members, practices);
+  var newAgilityPoint = calcAgilityPoint(members, practices);
   var newProductivityLevel = calcProductivityLevel(newProdPoint, gameState.productivityLevels);
   var newAgilityLevel = calcAgilityLevel(newAgilityPoint, gameState.agilityLevels);
 
@@ -9,6 +9,9 @@ export const handCardPlay = (card, members, gameState)=>{
   newGameState.agilityPoint = parseInt(newAgilityPoint);
   newGameState.productivityLevel = parseInt(newProductivityLevel);
   newGameState.agilityLevel = parseInt(newAgilityLevel);
+
+  //reduce turn action
+  newGameState.actionLeft -= 1;
 
   return newGameState;
 }
@@ -41,7 +44,7 @@ const calcAgilityLevel = (agilityPoint, agilityLevels)=>{
   }
 }
 
-const calcProductivityPoint = (members)=>{
+const calcProductivityPoint = (members, practices)=>{
   var newProdPt = 0;
   var headCount = members.length;
 
@@ -58,10 +61,23 @@ const calcProductivityPoint = (members)=>{
     }
   }
 
+  for (var card in practices) {
+    switch(practices[card].prodPointType) {
+      case 'static':
+        newProdPt += practices[card].prodPoint;
+        break;
+      case 'totalHeadCount':
+        newProdPt += headCount * practices[card].prodPointMultiplier;
+        break;
+      default:
+        newProdPt;
+    }
+  }
+
   return newProdPt;
 }
 
-const calcAgilityPoint = (members)=>{
+const calcAgilityPoint = (members, practices)=>{
   var newAgilityPt = 0;
   var headCount = members.length;
 
@@ -72,6 +88,19 @@ const calcAgilityPoint = (members)=>{
         break;
       case 'totalHeadCount':
         newAgilityPt += headCount * members[card].agilityPointMultiplier;
+        break;
+      default:
+        newAgilityPt;
+    }
+  }
+
+  for (var card in practices) {
+    switch(practices[card].agilityPointType) {
+      case 'static':
+        newAgilityPt += practices[card].agilityPoint;
+        break;
+      case 'totalHeadCount':
+        newAgilityPt += headCount * practices[card].agilityPointMultiplier;
         break;
       default:
         newAgilityPt;

@@ -44,6 +44,7 @@ class Game extends Component<Props, State> {
     super(props);
     this.state = {
       turn: 1,
+      actionLeft: 1,
       productivityPoint: 0,
       agilityPoint: 0,
       productivityLevel: 1,
@@ -53,12 +54,21 @@ class Game extends Component<Props, State> {
     };
 
     this.playCard = this.playCard.bind(this);
+    this.handleEndTurn = this.handleEndTurn.bind(this);
   };
 
-  playCard(card, members) {
+  playCard(card, members, practices) {
     this.setState(
-      handCardPlay(card, members, this.state)
+      handCardPlay(card, members, practices, this.state)
     )
+  };
+
+  handleEndTurn() {
+    //console.log("=== " + JSON.stringify(state));
+    this.setState({
+      turn: this.state.turn + 1,
+      actionLeft: this.state.agilityLevel,
+    });
   };
 
   render() {
@@ -67,7 +77,7 @@ class Game extends Component<Props, State> {
     return (
       <div className="container game-root">
         <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} />
-        <GameStats initial={this.state} />
+        <GameStats initial={this.state} handleEndTurn={this.handleEndTurn} />
         <Notifications notifications={notifications} />
       </div>
     );
