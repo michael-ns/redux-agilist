@@ -60,7 +60,24 @@ class Game extends Component<Props, State> {
   playCard(card, members, practices) {
     this.setState(
       handCardPlay(card, members, practices, this.state)
-    )
+    );
+
+    //handle game end logic
+    if (this.state.productivityLevel === 5) {
+      this.context.store.dispatch(
+        success(
+          {
+            title: 'You Win!!!',
+            message: 'Refresh the page to start a new game',
+            position: 'tc',
+            autoDismiss: 0,
+            action: {
+              label: 'Sweeet bro!'
+            }
+          }
+        )
+      )
+    }
   };
 
   handleEndTurn() {

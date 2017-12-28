@@ -46,9 +46,7 @@ const memberMaxCount = (card, gameState, cardCollection, destination)=>{
 
   if (destination.droppableId === "memberZone") {
     var memberCount = cardCollection['memberZone'].cards.length;
-    var memberMaxCount = gameState.productivityLevel;
-
-    console.log("====" + memberCount + " - " + memberMaxCount);
+    var memberMaxCount = gameState.productivityLevel + 1;
 
     if (memberCount >= memberMaxCount) {
       result = "You cannot add another member before reaching the next Productivity Level";
