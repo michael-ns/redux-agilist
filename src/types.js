@@ -37,6 +37,17 @@ export type Card = {|
   agilityPointMultiplier: number
 |}
 
+export type Buff = {|
+  id: string,
+  buffName: string,
+  buffType: string,
+  buffTypeText: string,
+  buffValue: number;
+  buffValueText: string,
+  buffDesc: string,
+  buffIconUrl: string
+|}
+
 // export type CardCollection = {
 //   [key: string]: Card[]
 // }

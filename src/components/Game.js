@@ -9,8 +9,10 @@ import { storiesOf } from '@storybook/react';
 import styled from 'styled-components';
 import GamePanel from '../containers/GamePanel'
 import GameStats from '../containers/GameStats'
+import BuffRow from '../containers/BuffRow'
 import { cards, getCards } from '../card';
-import type { Card } from '../types';
+import { buffs, getBuffs } from '../buff';
+import type { Card, Buff } from '../types';
 import type { CardCollection } from '../types';
 import { handCardPlay } from '../models/GameCalc';
 
@@ -51,6 +53,7 @@ class Game extends Component<Props, State> {
       agilityLevel: 1,
       productivityLevels: [3, 5, 8, 13],
       agilityLevels: [3, 5, 8, 13],
+      buffs: getBuffs(0),
     };
 
     this.playCard = this.playCard.bind(this);
@@ -59,7 +62,7 @@ class Game extends Component<Props, State> {
 
   playCard(card, members, practices) {
     this.setState(
-      handCardPlay(card, members, practices, this.state)
+      handCardPlay(members, practices, this.state)
     );
 
     //handle game end logic
@@ -81,13 +84,38 @@ class Game extends Component<Props, State> {
   };
 
   handleEndTurn() {
+    //issue one random event by end of turn
+    const newBuff = getBuffs(1)[0];
+    this.state.buffs.push(newBuff);
+    this.context.store.dispatch(
+      warning(
+        {
+          title: 'Something Happened...',
+          message: newBuff.buffDesc,
+          position: 'tc',
+          autoDismiss: 6
+        }
+      )
+    );
+
+    //re-calculate game stats
+    var members = cardCollection['memberZone'].cards;
+    var practices = cardCollection['practiceZone'].cards;
+
+    this.setState(
+      handCardPlay(members, practices, this.state)
+    );
+
+    //deal one card to hand
+    cardCollection[handZone].cards.push(getCards(1)[0]);
+
+    //update turn count and action left
     this.setState({
       turn: this.state.turn + 1,
       actionLeft: this.state.agilityLevel,
     });
-
-    //deal one card to hand
-    cardCollection[handZone].cards.push(getCards(1)[0]);
+    console.log("=====" + this.state.turn);
+    console.log("=====" + this.state.agilityLevel);
   };
 
   render() {
@@ -96,6 +124,7 @@ class Game extends Component<Props, State> {
     return (
       <div className="container game-root">
         <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} />
+        <BuffRow initial={this.state} />
         <GameStats initial={this.state} handleEndTurn={this.handleEndTurn} />
         <Notifications notifications={notifications} />
       </div>

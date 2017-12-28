@@ -1,6 +1,6 @@
-export const handCardPlay = (card, members, practices, gameState)=>{
-  var newProdPoint = calcProductivityPoint(members, practices);
-  var newAgilityPoint = calcAgilityPoint(members, practices);
+export const handCardPlay = (members, practices, gameState)=>{
+  var newProdPoint = calcProductivityPoint(members, practices, gameState);
+  var newAgilityPoint = calcAgilityPoint(members, practices, gameState);
   var newProductivityLevel = calcProductivityLevel(newProdPoint, gameState.productivityLevels);
   var newAgilityLevel = calcAgilityLevel(newAgilityPoint, gameState.agilityLevels);
 
@@ -44,7 +44,7 @@ const calcAgilityLevel = (agilityPoint, agilityLevels)=>{
   }
 }
 
-const calcProductivityPoint = (members, practices)=>{
+const calcProductivityPoint = (members, practices, gameState)=>{
   var newProdPt = 0;
   var headCount = members.length;
 
@@ -74,10 +74,24 @@ const calcProductivityPoint = (members, practices)=>{
     }
   }
 
+  var buffs = gameState.buffs;
+  for (var buff in buffs) {
+    switch(buffs[buff].buffType) {
+      case 'productivityPercentage':
+        newProdPt = (1 + buffs[buff].buffValue) * newProdPt;
+        break;
+      case 'productivityStatic':
+        newProdPt += buffs[buff].buffValue;
+        break;
+      default:
+        newProdPt;
+    }
+  }
+
   return newProdPt;
 }
 
-const calcAgilityPoint = (members, practices)=>{
+const calcAgilityPoint = (members, practices, gameState)=>{
   var newAgilityPt = 0;
   var headCount = members.length;
 
@@ -101,6 +115,20 @@ const calcAgilityPoint = (members, practices)=>{
         break;
       case 'totalHeadCount':
         newAgilityPt += headCount * practices[card].agilityPointMultiplier;
+        break;
+      default:
+        newAgilityPt;
+    }
+  }
+
+  var buffs = gameState.buffs;
+  for (var buff in buffs) {
+    switch(buffs[buff].buffType) {
+      case 'agilityPercentage':
+        newAgilityPt = (1 + buffs[buff].buffValue) * newAgilityPt;
+        break;
+      case 'agilityStatic':
+        newAgilityPt += buffs[buff].buffValue;
         break;
       default:
         newAgilityPt;
