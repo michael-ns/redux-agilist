@@ -25,11 +25,11 @@ const Root = styled.div`
   background-color: ${colors.blue.deep};
   box-sizing: border-box;
   padding: ${grid * 2}px;
-  min-height: 50vh;
   /* flexbox */
   display: flex;
   flex-direction: column;
 `;
+//  min-height: 50vh;
 
 const isDraggingClassName = 'is-dragging';
 

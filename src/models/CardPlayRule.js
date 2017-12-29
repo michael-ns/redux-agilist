@@ -48,7 +48,7 @@ const memberMaxCount = (card, gameState, cardCollection, destination)=>{
     var memberCount = cardCollection['memberZone'].cards.length;
     var memberMaxCount = gameState.productivityLevel + 1;
 
-    if (memberCount >= memberMaxCount) {
+    if (memberCount > memberMaxCount) {
       result = "You cannot add another member before reaching the next Productivity Level";
     }
   }

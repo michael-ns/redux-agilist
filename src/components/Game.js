@@ -51,7 +51,7 @@ class Game extends Component<Props, State> {
       agilityPoint: 0,
       productivityLevel: 1,
       agilityLevel: 1,
-      productivityLevels: [3, 5, 8, 13],
+      productivityLevels: [3, 5, 8, 15],
       agilityLevels: [3, 5, 8, 13],
       buffs: getBuffs(0),
     };

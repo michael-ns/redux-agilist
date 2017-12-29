@@ -35,7 +35,8 @@ export default class BuffRow extends Component<Props, State> {
     var buffsRow = {
       backgroundColor: 'Beige',
       minHeight: '60px',
-      padding: "10px",
+      padding: '10px',
+      marginTop: '20px'
     };
 
      return (
