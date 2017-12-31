@@ -1,4 +1,26 @@
-export const handCardPlay = (members, practices, gameState)=>{
+export const handCardPlay = (card, members, practices, gameState)=>{
+  var newBuffs = calcBuffs(card, gameState);
+  gameState.buffs = newBuffs;
+
+  var newProdPoint = calcProductivityPoint(members, practices, gameState);
+  var newAgilityPoint = calcAgilityPoint(members, practices, gameState);
+  var newProductivityLevel = calcProductivityLevel(newProdPoint, gameState.productivityLevels);
+  var newAgilityLevel = calcAgilityLevel(newAgilityPoint, gameState.agilityLevels);
+
+  const newGameState = gameState;
+  newGameState.productivityPoint = parseInt(newProdPoint);
+  newGameState.agilityPoint = parseInt(newAgilityPoint);
+  newGameState.productivityLevel = parseInt(newProductivityLevel);
+  newGameState.agilityLevel = parseInt(newAgilityLevel);
+  //newGameState.buffs = newBuffs;
+
+  //reduce turn action
+  newGameState.actionLeft -= 1;
+
+  return newGameState;
+}
+
+export const handleEndTurnGameCalc = (members, practices, gameState)=>{
   var newProdPoint = calcProductivityPoint(members, practices, gameState);
   var newAgilityPoint = calcAgilityPoint(members, practices, gameState);
   var newProductivityLevel = calcProductivityLevel(newProdPoint, gameState.productivityLevels);
@@ -10,10 +32,28 @@ export const handCardPlay = (members, practices, gameState)=>{
   newGameState.productivityLevel = parseInt(newProductivityLevel);
   newGameState.agilityLevel = parseInt(newAgilityLevel);
 
-  //reduce turn action
-  newGameState.actionLeft -= 1;
-
   return newGameState;
+}
+
+//remove buffs that can be mitigated by this card
+const calcBuffs = (card, gameState)=>{
+  var buffs = gameState.buffs;
+
+  if (card.problemsCanBeMitigated.length > 0 && buffs.length > 0) {
+    var problemsCanBeMitigated = card.problemsCanBeMitigated;
+    var newBuffs = buffs;
+    
+    for (var buff in buffs) {
+      for (var problem in problemsCanBeMitigated) {
+        if (buffs[buff].buffName === problemsCanBeMitigated[problem]) {
+          newBuffs.splice(buff, 1);
+        }
+      }
+    }
+    buffs = newBuffs;
+  }
+
+  return buffs;
 }
 
 const calcProductivityLevel = (prodPoint, productivityLevels)=>{

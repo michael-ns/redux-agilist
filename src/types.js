@@ -34,7 +34,8 @@ export type Card = {|
   prodPointMultiplier: number,
   agilityPoint: number,
   agilityPointType: string,
-  agilityPointMultiplier: number
+  agilityPointMultiplier: number,
+  problemsCanBeMitigated: []
 |}
 
 export type Buff = {|

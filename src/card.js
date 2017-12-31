@@ -12,7 +12,8 @@ const developer: Card = {
   prodPointMultiplier: 1,
   agilityPoint: 1,
   agilityPointType: 'static',
-  agilityPointMultiplier: 1
+  agilityPointMultiplier: 1,
+  problemsCanBeMitigated: []
 };
 
 const tester: Card = {
@@ -26,7 +27,8 @@ const tester: Card = {
   prodPointMultiplier: 2,
   agilityPoint: 1,
   agilityPointType: 'static',
-  agilityPointMultiplier: 1
+  agilityPointMultiplier: 1,
+  problemsCanBeMitigated: []
 };
 
 const businessAnalyst: Card = {
@@ -40,7 +42,8 @@ const businessAnalyst: Card = {
   prodPointMultiplier: 1.5,
   agilityPoint: 1,
   agilityPointType: 'static',
-  agilityPointMultiplier: 1
+  agilityPointMultiplier: 1,
+  problemsCanBeMitigated: []
 };
 
 const scrumMaster: Card = {
@@ -54,7 +57,8 @@ const scrumMaster: Card = {
   prodPointMultiplier: 1,
   agilityPoint: 0,
   agilityPointType: 'totalHeadCount',
-  agilityPointMultiplier: 1
+  agilityPointMultiplier: 1,
+  problemsCanBeMitigated: []
 };
 
 const agileBootcampTraining: Card = {
@@ -68,7 +72,23 @@ const agileBootcampTraining: Card = {
   prodPointMultiplier: 1,
   agilityPoint: 0,
   agilityPointType: 'totalHeadCount',
-  agilityPointMultiplier: 0.5
+  agilityPointMultiplier: 0.5,
+  problemsCanBeMitigated: []
+};
+
+const adoptINVESTStory: Card = {
+  id: '6',
+  cardType: 'practice',
+  name: 'Adopt INVEST Story',
+  desc: 'Can address unclear requirement',
+  avatarUrl: 'https://68.media.tumblr.com/avatar_09404f3287c6_128.png',
+  prodPoint: 0,
+  prodPointType: 'totalHeadCount',
+  prodPointMultiplier: 1,
+  agilityPoint: 0,
+  agilityPointType: 'static',
+  agilityPointMultiplier: 1,
+  problemsCanBeMitigated: ['Unclear Requirement']
 };
 
 export const cards: Card[] = [
@@ -76,7 +96,8 @@ export const cards: Card[] = [
   tester,
   businessAnalyst,
   scrumMaster,
-  agileBootcampTraining
+  agileBootcampTraining,
+  adoptINVESTStory
 ]
 
 let idCount: number = 0;
@@ -97,6 +118,7 @@ export const getCards = (count: number): Card[] =>
       agilityPoint: random.agilityPoint,
       agilityPointType: random.agilityPointType,
       agilityPointMultiplier: random.agilityPointMultiplier,
+      problemsCanBeMitigated: random.problemsCanBeMitigated,
     };
 
     return custom;

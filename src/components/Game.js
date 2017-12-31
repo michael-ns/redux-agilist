@@ -14,7 +14,7 @@ import { cards, getCards } from '../card';
 import { buffs, getBuffs } from '../buff';
 import type { Card, Buff } from '../types';
 import type { CardCollection } from '../types';
-import { handCardPlay } from '../models/GameCalc';
+import { handCardPlay, handleEndTurnGameCalc } from '../models/GameCalc';
 
 const memberZone: string = 'memberZone';
 const practiceZone: string = 'practiceZone';
@@ -62,7 +62,7 @@ class Game extends Component<Props, State> {
 
   playCard(card, members, practices) {
     this.setState(
-      handCardPlay(members, practices, this.state)
+      handCardPlay(card, members, practices, this.state)
     );
 
     //handle game end logic
@@ -103,7 +103,7 @@ class Game extends Component<Props, State> {
     var practices = cardCollection['practiceZone'].cards;
 
     this.setState(
-      handCardPlay(members, practices, this.state)
+      handleEndTurnGameCalc(members, practices, this.state)
     );
 
     //deal one card to hand
@@ -114,8 +114,6 @@ class Game extends Component<Props, State> {
       turn: this.state.turn + 1,
       actionLeft: this.state.agilityLevel,
     });
-    console.log("=====" + this.state.turn);
-    console.log("=====" + this.state.agilityLevel);
   };
 
   render() {
