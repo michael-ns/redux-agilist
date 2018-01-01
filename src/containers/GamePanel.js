@@ -39,14 +39,6 @@ type Props = {|
 
 type State = ReorderCardCollectionResult;
 
-const notificationOpts = {
-  // uid: 'once-please', // you can specify your own uid if required
-  title: 'Hey, it\'s good to see you!',
-  message: 'Now you can see how easy it is to use notifications in React!',
-  position: 'bc',
-  autoDismiss: 6
-};
-
 class GameBoard extends Component<Props, State> {
   /* eslint-disable react/sort-comp */
   constructor(props) {

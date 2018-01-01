@@ -58,6 +58,7 @@ class Game extends Component<Props, State> {
 
     this.playCard = this.playCard.bind(this);
     this.handleEndTurn = this.handleEndTurn.bind(this);
+    this.shuffleHand = this.shuffleHand.bind(this);
   };
 
   playCard(card, members, practices) {
@@ -80,6 +81,25 @@ class Game extends Component<Props, State> {
           }
         )
       )
+    }
+  };
+
+  shuffleHand() {
+    var currentHandCount = cardCollection[handZone].cards.length;
+    if (currentHandCount <= 1) {
+      this.context.store.dispatch(
+        warning(
+          {
+            title: 'Invalid Game Action',
+            message: 'Insufficient number of hand cards!',
+            position: 'tc',
+            autoDismiss: 4
+          }
+        )
+      )
+    } else {
+      cardCollection[handZone].cards = getCards(currentHandCount - 1);
+      this.forceUpdate();
     }
   };
 
@@ -123,7 +143,7 @@ class Game extends Component<Props, State> {
           }
         )
       );
-    }    
+    }
 
     //re-calculate game stats
     var members = cardCollection['memberZone'].cards;
@@ -150,7 +170,7 @@ class Game extends Component<Props, State> {
       <div className="container game-root">
         <GamePanel cardCollection={cardCollection} playCard={this.playCard} gameState={this.state} />
         <BuffRow initial={this.state} />
-        <GameStats initial={this.state} handleEndTurn={this.handleEndTurn} />
+        <GameStats initial={this.state} handleEndTurn={this.handleEndTurn} shuffleHand={this.shuffleHand} />
         <Notifications notifications={notifications} />
       </div>
     );

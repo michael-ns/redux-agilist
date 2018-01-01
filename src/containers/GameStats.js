@@ -20,6 +20,7 @@ export default class GameStats extends Component<Props, State> {
     };
 
     this.handleEndTurn = this.handleEndTurn.bind(this);
+    this.shuffleHand = this.shuffleHand.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,6 +38,10 @@ export default class GameStats extends Component<Props, State> {
 
   handleEndTurn() {
     this.props.handleEndTurn();
+  }
+
+  shuffleHand = () => {
+    this.props.shuffleHand();
   }
 
   render() {
@@ -68,6 +73,10 @@ export default class GameStats extends Component<Props, State> {
 
     var infoStyle = {
       fontSize: '12px'
+    };
+
+    var shuffleStyle = {
+      marginBottom: '15px'
     };
 
      return (
@@ -103,6 +112,7 @@ export default class GameStats extends Component<Props, State> {
          <div className="col-md-2 agility">
            <p>Turn: {turn}</p>
            <p style={agilityStyle}>Action Left: {actionLeft}</p>
+           <button type="button" className="btn btn-warning" style={shuffleStyle} onClick={this.shuffleHand}>Shuffle Hand</button>
            <button type="button" className="btn btn-info" onClick={this.handleEndTurn}>End Turn</button>
          </div>
        </div>
