@@ -11,7 +11,7 @@ import GamePanel from '../containers/GamePanel'
 import GameStats from '../containers/GameStats'
 import BuffRow from '../containers/BuffRow'
 import { cards, getCards } from '../card';
-import { buffs, getBuffs } from '../buff';
+import { buffs, getBuffs, issueValidEvent } from '../buff';
 import type { Card, Buff } from '../types';
 import type { CardCollection } from '../types';
 import { handCardPlay, handleEndTurnGameCalc } from '../models/GameCalc';
@@ -84,19 +84,46 @@ class Game extends Component<Props, State> {
   };
 
   handleEndTurn() {
-    //issue one random event by end of turn
-    const newBuff = getBuffs(1)[0];
-    this.state.buffs.push(newBuff);
-    this.context.store.dispatch(
-      warning(
-        {
-          title: 'Something Happened...',
-          message: newBuff.buffDesc,
-          position: 'tc',
-          autoDismiss: 6
+    //issue one random event by end of turn - no duplicate event and no event conflict with practices
+    var validBuffs = buffs;
+
+    var buffIndex = validBuffs.length;
+    while (buffIndex--) {
+      for (var currentBuffIndex in this.state.buffs) {
+        if (validBuffs[buffIndex].buffName === this.state.buffs[currentBuffIndex].buffName) {
+          validBuffs.splice(buffIndex, 1);
         }
-      )
-    );
+      }
+    }
+
+
+    var practiceCards = cardCollection[practiceZone].cards;
+    for (var practiceIndex in practiceCards) {
+      for (var problemIndex in practiceCards[practiceIndex].problemsCanBeMitigated) {
+        var buffIndex = buffs.length;
+        while (buffIndex--) {
+          if (buffs[buffIndex].buffName === practiceCards[practiceIndex].problemsCanBeMitigated[problemIndex]) {
+            validBuffs.splice(buffIndex, 1);
+          }
+        }
+      }
+    }
+
+    if (validBuffs.length > 0) {
+      const newBuff = issueValidEvent(validBuffs);
+      this.state.buffs.push(newBuff);
+
+      this.context.store.dispatch(
+        warning(
+          {
+            title: 'Something Happened...',
+            message: newBuff.buffDesc,
+            position: 'tc',
+            autoDismiss: 6
+          }
+        )
+      );
+    }    
 
     //re-calculate game stats
     var members = cardCollection['memberZone'].cards;

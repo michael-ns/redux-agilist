@@ -47,3 +47,21 @@ export const getBuffs = (count: number): Buff[] =>
 
     return custom;
   });
+
+  //provide one buff from a valid list
+  export const issueValidEvent = (validBuffs) => {
+    const random: Buff = validBuffs[Math.floor(Math.random() * validBuffs.length)];
+
+    const custom: Buff = {
+      id: `buff-${idCount++}`,
+      buffName: random.buffName,
+      buffType: random.buffType,
+      buffTypeText: random.buffTypeText,
+      buffValue: random.buffValue,
+      buffValueText: random.buffValueText,
+      buffDesc: random.buffDesc,
+      buffIconUrl: random.buffIconUrl,
+    };
+
+    return custom;
+  }

@@ -42,14 +42,16 @@ const calcBuffs = (card, gameState)=>{
   if (card.problemsCanBeMitigated.length > 0 && buffs.length > 0) {
     var problemsCanBeMitigated = card.problemsCanBeMitigated;
     var newBuffs = buffs;
-    
-    for (var buff in buffs) {
+
+    var buffIndex = buffs.length;
+    while (buffIndex--) {
       for (var problem in problemsCanBeMitigated) {
-        if (buffs[buff].buffName === problemsCanBeMitigated[problem]) {
-          newBuffs.splice(buff, 1);
+        if (buffs[buffIndex].buffName === problemsCanBeMitigated[problem]) {
+          newBuffs.splice(buffIndex, 1);
         }
       }
     }
+
     buffs = newBuffs;
   }
 
